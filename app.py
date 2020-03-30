@@ -8,6 +8,9 @@ from forms import Connexion
 
 from models import User
 
+from flask_login import login_user, current_user, login_required, LoginManager, logout_user
+
+
 import requests
 # from user import User
 import click
@@ -19,9 +22,15 @@ import os
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
-# login_manager = LoginManager()
 
-# login_manager.init_app(app)
+
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(id=user_id)
 
 #créer table
 @app.cli.command()
@@ -57,7 +66,30 @@ def user_create():
         return redirect(url_for('index'))
     return render_template('inscription.html',form=form)
 
+@app.route('/connexion', methods=['GET', 'POST', ])
+def connexion():
+    form = Connexion() 
+    if form.validate_on_submit():
+        loginConnecte = form.login.data.upper()
+        mdpConnecte = form.password.data
+        user = User.select().where((User.login == loginConnecte) & (User.password == mdpConnecte)).first()
+        if (user == None):
+            print("Identifiants incorrect")
+        else:
+            login_user(user)
+            current_user.id = user.id
+            return redirect(url_for('dashboard'))
+    return render_template('login.html', form=form)
 
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/deconnexion')
+@login_required
+def deconnexion():
+    logout_user()
+    return redirect(url_for('index'))
 
 ######"méthode avec session !!!!!!"########### à remplir
 # @app.route('/login', methods=['GET', 'POST'])

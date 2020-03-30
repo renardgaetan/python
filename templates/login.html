@@ -1,28 +1,33 @@
-
-
-
-
-
-<!DOCTYPE html>
-{% extends "base.html" %}
-{% block title %}Index{% endblock %}
 {% block content %}
-<h2>Connexion</h2>
-
-<form method="POST">
-    {% for field in form %}
-        {% if field.widget.input_type != 'hidden' %}
-            {{ field.label() }}
-            {% if field.errors %}
-                {% for error in field.errors %}
-                <div class="alert alert-error">{{ error }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endif %}
-        {{ field() }}
-
-    {% endfor %}
-    <button type="submit">Save</button>
-</form>
-
+	<form method="POST">
+		<div class="container formulaire">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm">
+						<h3 class="">CONNEXION</h3>
+					</div>	
+				</div>
+			</div>
+			{% for field in form %}
+				{% if field.widget.input_type != 'hidden' %}
+					<div class="row">
+						<div class="col-sm">
+							{{ field.label(class_="form-label") }}
+						</div>
+					</div>
+					{% if field.errors %}
+						{% for error in field.errors %}
+							<div class="">{{ error }}</div>
+						{% endfor %}
+					{% endif %}
+				{% endif %}
+				<div class="row">
+					<div class="col-sm">
+						{{ field(class_="form-control form-input") }}
+					</div>
+				</div>
+			{% endfor %}
+			<button type="submit" class="">Se connecter</button>
+		</div>
+	</form>
 {% endblock %}
