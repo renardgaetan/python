@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <form method="POST">
+        <div class="container formulaire">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <h3 class="">Inscription</h3>
+                    </div>
+                </div>
+            </div>
+            {% for field in form %}
+                {% if field.widget.input_type != 'hidden' %}
+                    <div class="row">
+                        <div class="col-sm">{{ field.label(class_="form-label") }}</div>
+                    </div>
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <div class="">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm">{{ field(class_="form-control") }}</div>
+                </div>
+            {% endfor %}
+            <button type="submit" class="">S'inscrire</button>
+        </div>
+    </form>
+{% endblock %}
