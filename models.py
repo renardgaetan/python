@@ -8,8 +8,6 @@ class BaseModel(Model):
         database = database
 
 class User(BaseModel):
-    first_name = CharField()
-    last_name = CharField()
     login = CharField()
     password = CharField()
 

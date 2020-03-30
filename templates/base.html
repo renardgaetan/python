@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+</head>
+<body>
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+        {% block footer %}
+        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        {% endblock %}
+    </footer>
+</body>
+</html>

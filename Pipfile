@@ -8,6 +8,15 @@ verify_ssl = true
 [packages]
 peewee = "*"
 flask = "*"
+faker = "*"
+awesome-slugify = "*"
+flask-login = "*"
+flask-wtf = "*"
+jinja = "*"
+requests = "*"
+feedparser = "*"
+os = "*"
+flash = "*"
 
 [requires]
 python_version = "3.7"
