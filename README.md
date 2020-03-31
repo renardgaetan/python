@@ -1,11 +1,5 @@
-=================================================
-*												*
-*				PROJET PYTHON					*
-*		LECTEUR DE FLUX DE SYNDICATION			*
-*												*					
-=================================================
-
-
+			         PROJET PYTHON				
+		LECTEUR DE FLUX DE SYNDICATION													
 
 La page index.html est notre page d'accueil.
 Cette page permet de :
