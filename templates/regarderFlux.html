@@ -1,0 +1,45 @@
+
+
+
+
+<!DOCTYPE html>
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container conteneur">
+    <div class="row">
+        <div class="col-sm">
+            <h1>{{ fluxparse.feed.title }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <h1>{{ fluxparse.feed.description }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <h1>{{ fluxparse.feed.rights }}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    {% for item in fluxparse %}
+        <div class="element">
+            <div class="row">
+                <div class="col-8">
+                    <h4>{{ item.title }}</h4>
+                </div>
+                <div class="col-4">
+                    <p>{{ item.summary }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <p>{{ item.link }}</p>
+                </div>
+            </div>
+        </div>        
+    {% endfor %}  
+</div>
+
+{% endblock %}

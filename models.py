@@ -13,14 +13,16 @@ class User(BaseModel, UserMixin):
     login = CharField()
     password = CharField()
 
-
+class Flux(BaseModel):
+    lien = CharField()
+    user = BigIntegerField()
 
 def create_tables():
     with database:
-        database.create_tables([User, ])
+        database.create_tables([User,Flux ])
 
 def drop_tables():
     with database:
-        database.drop_tables([User, ])
+        database.drop_tables([User,Flux ])
 
     

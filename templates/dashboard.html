@@ -1,6 +1,40 @@
-<p>Bonjour {{ current_user.login }}</p>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+</head>
+<body>
+    <p>Bonjour {{ current_user.login }}</p>
+
+    {% for flux in list_flux %}
+    <ul>
+        <li>{{flux.feed.title}}</li>
+        <li><a href="{{ url_for('regarderFlux', lienFlux=flux.feed.link ) }}">Regarder flux</a></li>
+        <li><a href="/supprimerFlux">Supprimer flux</a></li>
+
+
+
+    </ul>
+
+
+    {% endfor %}
+
+
 
 <a href="/deconnexion">Se déconnecter</a>
+<br>
+<a href="/ajouterFlux">Ajouter flux</a>
 
-<a href="/deconnexion">Ajouter flux</a>
 
+
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+        {% block footer %}
+        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        {% endblock %}
+    </footer>
+</body>
+</html>

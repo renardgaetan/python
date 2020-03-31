@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Length
 from wtforms.widgets import PasswordInput
 from feedparser import *
 
-class ajouterFlux(FlaskForm):
+class AjouterFlux(FlaskForm):
     lien = StringField('Lien du flux', validators=[DataRequired()])
     pass
 

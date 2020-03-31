@@ -17,6 +17,7 @@ requests = "*"
 feedparser = "*"
 os = "*"
 flash = "*"
+request = "*"
 
 [requires]
 python_version = "3.7"

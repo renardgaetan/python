@@ -1,19 +1,24 @@
-from flask import render_template, flash, redirect, url_for, Flask
+from flask import render_template, flash, redirect, url_for, request, Flask
 
 from models import create_tables
 from models import drop_tables
 
 from forms import Inscription
 from forms import Connexion
+from forms import AjouterFlux
 
 from models import User
+from models import Flux
 
 from flask_login import login_user, current_user, login_required, LoginManager, logout_user
 
 
 import requests
+
 # from user import User
 import click
+
+import feedparser
 
 
 app = Flask(__name__)
@@ -59,18 +64,23 @@ def index():
 def user_create():
     user = User()
     form = Inscription()
-    if form.validate_on_submit():
-        form.populate_obj(user)
-        user.save()
-        flash('inscription effectuee')
-        return redirect(url_for('index'))
+    login = form.login.data
+    mdp = form.password.data
+    existe = User.select().where(User.login == login).first()
+    if(existe == None):
+        if form.validate_on_submit():
+            form.populate_obj(user)
+            user.save()
+            flash('inscription effectuee')
+            return redirect(url_for('index'))
+        return render_template('inscription.html',form=form)
     return render_template('inscription.html',form=form)
 
 @app.route('/connexion', methods=['GET', 'POST', ])
 def connexion():
     form = Connexion() 
     if form.validate_on_submit():
-        loginConnecte = form.login.data.upper()
+        loginConnecte = form.login.data
         mdpConnecte = form.password.data
         user = User.select().where((User.login == loginConnecte) & (User.password == mdpConnecte)).first()
         if (user == None):
@@ -83,7 +93,13 @@ def connexion():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    list_flux=[]
+    list_flux_user = Flux.select().where((Flux.user == current_user.id))
+    for i in list_flux_user:
+        fluxparse = feedparser.parse(i.lien)
+        list_flux.append(fluxparse)
+
+    return render_template('dashboard.html', list_flux_user=list_flux_user, list_flux=list_flux)
 
 @app.route('/deconnexion')
 @login_required
@@ -91,83 +107,37 @@ def deconnexion():
     logout_user()
     return redirect(url_for('index'))
 
-######"méthode avec session !!!!!!"########### à remplir
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
+@app.route('/ajouterFlux', methods=['GET', 'POST', ])
+@login_required
+def ajouterFlux():
+    form = AjouterFlux()
+    if form.validate_on_submit():
+        fluxExistant = Flux.select().where((Flux.lien == form.lien.data) & (Flux.user == current_user.id)).first()
+        if(fluxExistant == None):
+            flux = Flux()
+            flux.user = current_user.id
+            flux.lien = form.lien.data
+            flux.save()
+            return redirect(url_for('dashboard'))   
+        else:
+            return redirect(url_for('ajouterFlux'))
+    return render_template('ajouterFlux.html',form=form)
 
-#     form = LoginForm()
-#     if form.validate_on_submit():
+@app.route('/regarderFlux', methods=['GET', 'POST'])
+@login_required
+def regarderFlux():
+    lienFlux = request.args.get('lienFlux')
+    fluxparse = feedparser.parse(lienFlux)
+    print(fluxparse)
+    element = fluxparse.entries
+    print(element)
+    return render_template('regarderFlux.html',fluxparse=fluxparse,element=element)
 
-#         login_user(user)
-
-#         flask.flash('Logged in successfully.')
-
-#         next = flask.request.args.get('next')
-
-#         if not is_safe_url(next):
-#             return flask.abort(400)
-
-#         return flask.redirect(next or flask.url_for('index'))
-
-#     return flask.render_template('login.html', form=form)
-
-
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     logout_user()
-#     return redirect(somewhere)
-
-# @app.cli.command()
-# def fakedata():
-#     from faker import Faker
-#     from slugify import slugify
-#     fake = Faker()
-#     for pk in range(0, 42):
-#         login = fake.user_name()
-#         password = fake.color_name()
-#         User.create(    
-#                         login=login,
-#                         password=password)
-
-# @app.route('/inscription', methods=['GET', 'POST'])
-# def inscription():
-#     form = -- RECUPERER LA FORM
-#         login = form.login.data
-#         mdp = form.password.data
-#         existe = User.select().where(User.login == login).first()
-#         if(existe == None):
-#             utilisateur = User()
-#             utilisateur.login = login.upper()
-#             utilisateur.password = mdp
-#             utilisateur.save()
-#             return redirect(url_for('index'))
-#         else:
-#             flash("L'utilisateur existe déja")
-#             return redirect(url_for('inscription'))
-#     return render_template('inscription.html', form=form)    
-
-# @app.route('/inscription', methods=['GET', 'POST'])
-# def inscription():
-#     form = -- RECUPERER LA FORM
-#         login = form.login.data
-#         mdp = form.password.data
-#         existe = User.select().where(User.login == login).first()
-#         if(existe == None):
-#             utilisateur = User()
-#             utilisateur.login = login.upper()
-#             utilisateur.password = mdp
-#             utilisateur.save()
-#             return redirect(url_for('index'))
-#         else:
-#             flash("L'utilisateur existe déja")
-#             return redirect(url_for('inscription'))
-#     return render_template('inscription.html', form=form)    
-
-# @app.route('/flux', methods=['GET', 'POST'])
-# @login_required
-# def RegarderFlux():
-#     linkFlux = request.args.get('linkFlux')
-#     fluxparse = feedparser.parse(linkFlux)
-#     element = feedparser.parse(linkFlux).entries
-#     return render_template('RegarderFlux.html',fluxparse=fluxparse, element=element)
+@app.route('/supprimerFlux', methods=['GET','POST'])
+@login_required
+def supprimerFlux():
+    flux_idUser = request.args.get('flux_idUser')
+    flux_lien = request.args.get('flux_lien')
+    requete = Flux.delete().where((Flux.user == flux_idUser) & (Flux.lien == flux_lien))
+    requete.execute()
+    return redirect(url_for('dashboard'))
