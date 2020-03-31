@@ -1,0 +1,19 @@
+body{
+    background-color:grey;
+    color:white;
+}
+
+.liste{
+    list-style: none;
+    color:white;
+}
+
+a{
+    color:wheat;
+    text-decoration: none;
+}
+
+.navbar{
+    background-color: wheat!important;
+    color:black;
+}

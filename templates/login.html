@@ -1,12 +1,12 @@
+{% extends "index.html" %}
 {% block content %}
 	<form method="POST">
 		<div class="container formulaire">
 			<div class="container">
-				<div class="row">
-					<div class="col-sm">
-						<h3 class="">CONNEXION</h3>
-					</div>	
-				</div>
+				
+					
+			<h1 class="">CONNEXION</h3>
+					
 			</div>
 			{% for field in form %}
 				{% if field.widget.input_type != 'hidden' %}
@@ -27,7 +27,7 @@
 					</div>
 				</div>
 			{% endfor %}
-			<button type="submit" class="">Se connecter</button>
+			<button class="btn btn-light mx-auto" type="submit" class="">Se connecter</button>
 		</div>
 	</form>
 {% endblock %}

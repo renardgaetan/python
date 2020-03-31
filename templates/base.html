@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <title>{% block title %}{% endblock %} - My Webpage</title>
 </head>
 <body>
-    <main>{% block content %}{% endblock %}</main>
+
+    <main>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Bienvenue invité</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Accueil</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/connexion">connexion</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/inscription">inscription</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          {% block content %}{% endblock %}
+    </main>
     <footer>
         {% block footer %}
-        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+       <div class="col-12"> <p class="text-center">&copy; Copyright 2008 by Darmon Lee et Renard Gaetan</a></p></div>
         {% endblock %}
     </footer>
 </body>

@@ -4,16 +4,39 @@
 <html lang="en">
 <head>
 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <title>{% block title %}{% endblock %} - My Webpage</title>
 </head>
 <body>
-    <p>Bonjour {{ current_user.login }}</p>
 
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Bienvenue {{ current_user.login }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Accueil</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/connexion">Deconnexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ajouterFlux">Ajouter flux</a>
+                  </li>
+              </ul>
+            </div>
+          </nav>
+    
+
+    <h1>Liste de vos flux</h1>
     {% for flux in list_flux %}
     <ul>
-        <li>{{flux.feed.title}}</li>
-        <li><a href="{{ url_for('regarderFlux', lienFlux=flux.feed.link ) }}">Regarder flux</a></li>
-        <li><a href="/supprimerFlux">Supprimer flux</a></li>
+        <li class="liste">{{flux.feed.title}}</li>
+        <li class="liste"><a href="{{ url_for('regarderFlux', lienFlux=flux.feed.link ) }}">Regarder flux</a></li>
+        <li class="liste"><a href="/supprimerFlux">Supprimer flux</a></li>
 
 
 
@@ -24,17 +47,17 @@
 
 
 
-<a href="/deconnexion">Se déconnecter</a>
-<br>
-<a href="/ajouterFlux">Ajouter flux</a>
 
 
 
-    <main>{% block content %}{% endblock %}</main>
+
+    <main>
+          {% block content %}{% endblock %}</main>
     <footer>
         {% block footer %}
-        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        <div class="col-12"> <p class="text-center">&copy; Copyright 2008 by Darmon Lee et Renard Gaetan</a></p></div>
         {% endblock %}
     </footer>
+
 </body>
 </html>
